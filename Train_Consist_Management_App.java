@@ -1,54 +1,45 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
+// Custom Exception
+class InvalidCapacityException extends Exception {
+    InvalidCapacityException(String message) {
+        super(message);
+    }
+}
+
+// Bogie class
 class Bogie {
     String name;
     int capacity;
 
-    Bogie(String name, int capacity) {
+    // Constructor with validation
+    Bogie(String name, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Capacity must be greater than zero");
+        }
         this.name = name;
         this.capacity = capacity;
+    }
+
+    void display() {
+        System.out.println(name + " - Capacity: " + capacity);
     }
 }
 
 public class Train_Consist_Management_App {
     public static void main(String[] args) {
 
-        List<Bogie> bogies = new ArrayList<>();
+        try {
+            // Valid bogie
+            Bogie b1 = new Bogie("Sleeper", 72);
+            b1.display();
 
-        // Create large dataset
-        for (int i = 0; i < 100000; i++) {
-            bogies.add(new Bogie("Sleeper", 70 + (i % 10)));
+            // Invalid bogie (will throw exception)
+            Bogie b2 = new Bogie("AC Chair", -10);
+            b2.display();
+
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        // 🔹 Loop-based filtering
-        long startLoop = System.nanoTime();
-
-        List<Bogie> loopResult = new ArrayList<>();
-        for (Bogie b : bogies) {
-            if (b.capacity > 60) {
-                loopResult.add(b);
-            }
-        }
-
-        long endLoop = System.nanoTime();
-        long loopTime = endLoop - startLoop;
-
-        // 🔹 Stream-based filtering
-        long startStream = System.nanoTime();
-
-        List<Bogie> streamResult = bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
-
-        long endStream = System.nanoTime();
-        long streamTime = endStream - startStream;
-
-        // Results
-        System.out.println("Loop Result Size: " + loopResult.size());
-        System.out.println("Stream Result Size: " + streamResult.size());
-
-        System.out.println("Loop Time (ns): " + loopTime);
-        System.out.println("Stream Time (ns): " + streamTime);
     }
 }
