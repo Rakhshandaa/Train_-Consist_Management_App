@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Train_Consist_Management_App {
     public static void main(String[] args) {
 
+        // Sorted array (VERY IMPORTANT)
         String[] bogieIDs = {"BG101", "BG205", "BG309", "BG412", "BG550"};
 
         Scanner sc = new Scanner(System.in);
@@ -10,20 +11,30 @@ public class Train_Consist_Management_App {
         System.out.print("Enter Bogie ID to search: ");
         String key = sc.nextLine();
 
+        int low = 0, high = bogieIDs.length - 1;
         boolean found = false;
 
-        // Linear Search
-        for (int i = 0; i < bogieIDs.length; i++) {
-            if (bogieIDs[i].equals(key)) {
+        // Binary Search
+        while (low <= high) {
+
+            int mid = (low + high) / 2;
+
+            int result = key.compareTo(bogieIDs[mid]);
+
+            if (result == 0) {
                 found = true;
-                break; // early termination
+                System.out.println("Bogie ID FOUND at index: " + mid);
+                break;
+            }
+            else if (result < 0) {
+                high = mid - 1;   // search left
+            }
+            else {
+                low = mid + 1;    // search right
             }
         }
 
-        // Output
-        if (found) {
-            System.out.println("Bogie ID FOUND");
-        } else {
+        if (!found) {
             System.out.println("Bogie ID NOT FOUND");
         }
 
