@@ -1,79 +1,36 @@
+public class Train_Consist_Management_App {
+    public static void main(String[] args) {
 
-import java.util.*;
+        int[] capacities = {72, 56, 24, 70, 60};
 
-// Custom Runtime Exception
-class CargoSafetyException extends RuntimeException {
-    CargoSafetyException(String message) {
-        super(message);
-    }
-}
+        int n = capacities.length;
 
-// Goods Bogie Class
-class GoodsBogie {
-    String type;   // Rectangular / Cylindrical
-    String cargo;
+        // Bubble Sort
+        for (int i = 0; i < n - 1; i++) {
 
-    GoodsBogie(String type) {
-        this.type = type;
-    }
+            boolean swapped = false;
 
-    void assignCargo(String cargo) {
-        try {
-            // Rule: Rectangular cannot carry Petroleum
-            if (type.equalsIgnoreCase("Rectangular") && cargo.equalsIgnoreCase("Petroleum")) {
-                throw new CargoSafetyException("Unsafe: Rectangular bogie cannot carry Petroleum");
+            for (int j = 0; j < n - i - 1; j++) {
+
+                if (capacities[j] > capacities[j + 1]) {
+
+                    // swap
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+
+                    swapped = true;
+                }
             }
 
-            this.cargo = cargo;
-            System.out.println("Cargo assigned successfully: " + cargo);
-
-        } catch (CargoSafetyException e) {
-            System.out.println("Error: " + e.getMessage());
-
-        } finally {
-            System.out.println("Assignment attempt completed.\n");
-        }
-    }
-}
-
-public class Train_Consist_Management_App {
-    public static void main(String[] args) {
-
-        GoodsBogie b1 = new GoodsBogie("Cylindrical");
-        GoodsBogie b2 = new GoodsBogie("Rectangular");
-
-        // Safe assignment
-        b1.assignCargo("Petroleum");
-
-        // Unsafe assignment
-        b2.assignCargo("Petroleum");
-
-        // Program continues
-        b2.assignCargo("Coal");
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class Train_Consist_Management_App {
-
-    public static void main(String[] args) {
-
-        System.out.println("=== Train Consist Management App ===");
-
-        // Create HashMap for bogie-capacity mapping
-        Map<String, Integer> bogieCapacity = new HashMap<>();
-
-        // Add bogies with capacities
-        bogieCapacity.put("Sleeper", 72);
-        bogieCapacity.put("AC Chair", 50);
-        bogieCapacity.put("First Class", 30);
-
-        // Display bogie capacities
-        System.out.println("\nBogie Capacity Details:");
-
-        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
-            System.out.println(entry.getKey() + " -> " + entry.getValue());
+            // Optimization: stop if already sorted
+            if (!swapped) break;
         }
 
+        // Display result
+        System.out.println("Sorted Capacities:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
     }
 }
